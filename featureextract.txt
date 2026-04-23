@@ -1,26 +1,37 @@
 from sklearn.feature_extraction.text import TfidfVectorizer
 import matplotlib.pyplot as plt
+import numpy as np
 
-# Sample text data
+# 1. Sample text data
 text = [
     "machine learning is powerful",
     "deep learning is a part of machine learning",
     "AI is the future"
 ]
 
-# Feature Extraction
-vectorizer = TfidfVectorizer()
+# 2. TF-IDF Vectorization
+vectorizer = TfidfVectorizer(stop_words='english')
 X = vectorizer.fit_transform(text)
 
-# Convert to array
+# 3. Convert to array
 features = X.toarray()
 
-# Print feature names
-print("Features:", vectorizer.get_feature_names_out())
+# 4. Feature names
+feature_names = vectorizer.get_feature_names_out()
+print("Feature Names:\n", feature_names)
 
-# Graph (sum of TF-IDF scores)
-plt.bar(range(len(features[0])), features.sum(axis=0))
-plt.xlabel("Feature Index")
+# 5. Display TF-IDF matrix
+print("\nTF-IDF Matrix:\n", features)
+
+# 6. Sum of TF-IDF scores for each word
+tfidf_sum = features.sum(axis=0)
+
+# 7. Plot graph with word labels
+plt.figure(figsize=(10,5))
+plt.bar(feature_names, tfidf_sum)
+plt.xticks(rotation=45)
+plt.xlabel("Words")
 plt.ylabel("TF-IDF Score")
-plt.title("Feature Extraction using TF-IDF")
+plt.title("TF-IDF Feature Extraction")
+plt.tight_layout()
 plt.show()
