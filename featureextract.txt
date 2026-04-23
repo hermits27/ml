@@ -1,0 +1,26 @@
+from sklearn.feature_extraction.text import TfidfVectorizer
+import matplotlib.pyplot as plt
+
+# Sample text data
+text = [
+    "machine learning is powerful",
+    "deep learning is a part of machine learning",
+    "AI is the future"
+]
+
+# Feature Extraction
+vectorizer = TfidfVectorizer()
+X = vectorizer.fit_transform(text)
+
+# Convert to array
+features = X.toarray()
+
+# Print feature names
+print("Features:", vectorizer.get_feature_names_out())
+
+# Graph (sum of TF-IDF scores)
+plt.bar(range(len(features[0])), features.sum(axis=0))
+plt.xlabel("Feature Index")
+plt.ylabel("TF-IDF Score")
+plt.title("Feature Extraction using TF-IDF")
+plt.show()
