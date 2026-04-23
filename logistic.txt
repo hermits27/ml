@@ -1,26 +1,38 @@
+# ======================================
+# LOGISTIC REGRESSION (FINAL CODE)
+# ======================================
+
+import matplotlib.pyplot as plt
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import ConfusionMatrixDisplay, accuracy_score
-import matplotlib.pyplot as plt
+from sklearn.preprocessing import StandardScaler
 
-# Load dataset
+# 1. Load dataset
 X, y = load_iris(return_X_y=True)
 
-# Split data
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+# 2. Split data
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2
+)
 
-# Model
-model = LogisticRegression(max_iter=200)
+# 3. Scaling (optional but recommended)
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# 4. Model
+model = LogisticRegression(max_iter=300)
 model.fit(X_train, y_train)
 
-# Prediction
+# 5. Prediction
 y_pred = model.predict(X_test)
 
-# Accuracy
+# 6. Accuracy
 print("Accuracy:", accuracy_score(y_test, y_pred))
 
-# Confusion Matrix Graph
+# 7. Confusion Matrix
 ConfusionMatrixDisplay.from_predictions(y_test, y_pred)
 plt.title("Confusion Matrix - Logistic Regression")
 plt.show()
