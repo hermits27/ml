@@ -1,36 +1,27 @@
 import numpy as np
+import matplotlib.pyplot as plt
 from sklearn.datasets import load_iris
 from sklearn.preprocessing import StandardScaler
 
-# 1. Load dataset
-data = load_iris()
-X = data.data[:, :2]  # use 2 features for simplicity
-y = data.target
-
-# 2. Convert to binary classification
-# Class 0 -> 1, Others -> -1
+# Load data
+X, y = load_iris(return_X_y=True)
+X = StandardScaler().fit_transform(X[:, :2])
 y = np.where(y == 0, 1, -1)
 
-# 3. Normalize data (important for stability)
-scaler = StandardScaler()
-X = scaler.fit_transform(X)
-
-# 4. Initialize weights
-w = np.zeros(X.shape[1])
-
-# 5. Hebbian Training
+# Hebbian learning
+w = np.zeros(2)
 for i in range(len(X)):
-    w = w + X[i] * y[i]
+    w += X[i] * y[i]
 
-print("Learned Weights:", w)
+# Prediction & accuracy
+pred = np.sign(X @ w)
+print("Accuracy:", np.mean(pred == y))
 
-# 6. Prediction function
-def predict(X, w):
-    return np.sign(np.dot(X, w))
+# Plot
+plt.scatter(X[:,0], X[:,1], c=y, cmap='bwr')
 
-# 7. Predictions
-y_pred = predict(X, w)
+x = np.linspace(X[:,0].min(), X[:,0].max(), 100)
+plt.plot(x, -(w[0]/w[1])*x, 'g')  # decision boundary
 
-# 8. Accuracy
-accuracy = np.mean(y_pred == y)
-print("Accuracy:", accuracy)
+plt.title("Hebbian Learning")
+plt.show()
